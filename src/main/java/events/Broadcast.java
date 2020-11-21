@@ -1,7 +1,7 @@
 package events;
 
-import clients.Client;
-import clients.ClientRepositoryInterface;
+import clients.User;
+import clients.RepositoryInterface;
 
 import java.util.Collection;
 
@@ -16,8 +16,8 @@ public class Broadcast extends BaseEvent {
     }
 
     @Override
-    public void get(ClientRepositoryInterface clientRepository) {
-        Collection<Client> clients = clientRepository.getAll();
-        clients.forEach(client -> client.useEvent(this));
+    public void get(RepositoryInterface clientRepository) {
+        Collection<User> users = clientRepository.getAll();
+        users.forEach(client -> client.useEvent(this));
     }
 }

@@ -1,5 +1,5 @@
 import clients.ClientProcessor;
-import clients.ClientRepository;
+import clients.UserRepository;
 import events.EventProcessor;
 import events.EventQueue;
 import queues.QueueProcessor;
@@ -12,12 +12,12 @@ public class Main {
         ServerSocket clientSocket = new ServerSocket(9099);
         ServerSocket serverSocket = new ServerSocket(9090);
 
-        ClientRepository clientRepository = new ClientRepository();
+        UserRepository userRepository = new UserRepository();
         EventQueue eventQueue = new EventQueue();
 
         Thread eventThread = new Thread(new EventProcessor(eventQueue, serverSocket));
-        Thread clientThread = new Thread(new ClientProcessor(clientRepository, clientSocket));
-        Thread queueThread = new Thread(new QueueProcessor(eventQueue, clientRepository));
+        Thread clientThread = new Thread(new ClientProcessor(userRepository, clientSocket));
+        Thread queueThread = new Thread(new QueueProcessor(eventQueue, userRepository));
 
         eventThread.start();
         clientThread.start();

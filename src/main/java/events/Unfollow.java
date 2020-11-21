@@ -1,7 +1,7 @@
 package events;
 
-import clients.Client;
-import clients.ClientRepositoryInterface;
+import clients.User;
+import clients.RepositoryInterface;
 
 public class Unfollow extends BaseEvent {
     private final int fromUser;
@@ -19,8 +19,8 @@ public class Unfollow extends BaseEvent {
     }
 
     @Override
-    public void get(ClientRepositoryInterface clientRepository) {
-        Client client = clientRepository.get(toUser);
-        client.removeFollower(fromUser);
+    public void get(RepositoryInterface clientRepository) {
+        User user = clientRepository.get(toUser);
+        user.removeFollower(fromUser);
     }
 }

@@ -5,12 +5,12 @@ import events.BaseEvent;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Client implements Comparable<Client>{
+public class User implements Comparable<User>{
     private final Integer id;
     private final Set<Integer> followers = new HashSet<>();
     private final PrintWriter writer;
 
-    Client(int id, PrintWriter writer) {
+    User(int id, PrintWriter writer) {
         this.id = id;
         this.writer = writer;
     }
@@ -42,7 +42,7 @@ public class Client implements Comparable<Client>{
     }
 
     @Override
-    public int compareTo(Client client) {
-        return id.compareTo(client.id);
+    public int compareTo(User user) {
+        return id.compareTo(user.id);
     }
 }

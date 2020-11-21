@@ -5,12 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ClientProcessor implements Runnable {
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final ServerSocket serverSocket;
 
-    public ClientProcessor(ClientRepository clientRepository, ServerSocket serverSocket) {
+    public ClientProcessor(UserRepository userRepository, ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ClientProcessor implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String clientId = reader.readLine();
             if (clientId != null) {
-                clientRepository.add(Integer.parseInt(clientId), socket);
+                userRepository.add(Integer.parseInt(clientId), socket);
                 System.out.println("User connected: " + clientId);
             }
         } catch (IOException e) {

@@ -4,7 +4,7 @@ import events.BaseEvent;
 
 import java.util.Collection;
 
-public interface EventQueueInterface {
+public interface QueueInterface {
     void add(BaseEvent baseEventHandler);
     BaseEvent peek();
     BaseEvent poll();

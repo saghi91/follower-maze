@@ -1,7 +1,7 @@
 package events;
 
-import clients.Client;
-import clients.ClientRepositoryInterface;
+import clients.User;
+import clients.RepositoryInterface;
 
 public class Follow extends BaseEvent {
     private final int fromUser;
@@ -19,9 +19,9 @@ public class Follow extends BaseEvent {
     }
 
     @Override
-    public void get(ClientRepositoryInterface clientRepository) {
-        Client client = clientRepository.get(toUser);
-        client.addFollower(fromUser);
-        client.useEvent(this);
+    public void get(RepositoryInterface clientRepository) {
+        User user = clientRepository.get(toUser);
+        user.addFollower(fromUser);
+        user.useEvent(this);
     }
 }

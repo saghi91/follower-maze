@@ -1,7 +1,7 @@
 package events;
 
-import clients.Client;
-import clients.ClientRepositoryInterface;
+import clients.User;
+import clients.RepositoryInterface;
 
 public class PrivateMessage extends BaseEvent {
     private final int fromUserId;
@@ -19,8 +19,8 @@ public class PrivateMessage extends BaseEvent {
     }
 
     @Override
-    public void get(ClientRepositoryInterface clientRepository) {
-        Client client = clientRepository.get(toUser);
-        client.useEvent(this);
+    public void get(RepositoryInterface clientRepository) {
+        User user = clientRepository.get(toUser);
+        user.useEvent(this);
     }
 }

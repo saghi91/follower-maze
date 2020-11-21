@@ -1,11 +1,11 @@
 package events;
 
-import queues.EventQueueInterface;
+import queues.QueueInterface;
 
 import java.util.Collection;
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class EventQueue implements EventQueueInterface {
+public class EventQueue implements QueueInterface {
     private PriorityBlockingQueue<BaseEvent> queue = new PriorityBlockingQueue<>();
 
     @Override

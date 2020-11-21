@@ -1,7 +1,7 @@
 package events;
 
-import clients.Client;
-import clients.ClientRepositoryInterface;
+import clients.User;
+import clients.RepositoryInterface;
 
 import java.util.Collection;
 
@@ -19,14 +19,14 @@ public class StatusUpdate extends BaseEvent {
     }
 
     @Override
-    public void get(ClientRepositoryInterface clientRepository) {
-        Client client = clientRepository.get(fromUser);
-        Collection<Integer> followers = client.getFollowers();
+    public void get(RepositoryInterface clientRepository) {
+        User user = clientRepository.get(fromUser);
+        Collection<Integer> followers = user.getFollowers();
         followers.forEach(followerId -> {
-            Client follower = clientRepository.get(followerId);
+            User follower = clientRepository.get(followerId);
             boolean used = follower.useEvent(this);
             if (!used) {
-                client.removeFollower(follower.getId());
+                user.removeFollower(follower.getId());
             }
         });
     }

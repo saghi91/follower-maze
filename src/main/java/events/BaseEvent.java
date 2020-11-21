@@ -1,6 +1,6 @@
 package events;
 
-import clients.ClientRepositoryInterface;
+import clients.RepositoryInterface;
 
 public abstract class BaseEvent implements Comparable<BaseEvent> {
     public final int sequenceNumber;
@@ -14,5 +14,5 @@ public abstract class BaseEvent implements Comparable<BaseEvent> {
         return Integer.compare(sequenceNumber, baseEvent.sequenceNumber);
     }
 
-    public abstract void get(ClientRepositoryInterface clientRepository);
+    public abstract void get(RepositoryInterface clientRepository);
 }
