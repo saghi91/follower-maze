@@ -3,6 +3,7 @@ package events;
 import clients.RepositoryInterface;
 
 public abstract class BaseEvent implements Comparable<BaseEvent> {
+    public boolean hasIssue = false;
     public final int sequenceNumber;
 
     public BaseEvent(int sequenceNumber) {

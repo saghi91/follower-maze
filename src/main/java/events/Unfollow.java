@@ -1,7 +1,7 @@
 package events;
 
-import clients.User;
 import clients.RepositoryInterface;
+import clients.User;
 
 public class Unfollow extends BaseEvent {
     private final int fromUser;

@@ -1,7 +1,9 @@
 import clients.ClientProcessor;
 import clients.UserRepository;
+import events.DeadLetterEventQueue;
 import events.EventProcessor;
 import events.EventQueue;
+import queues.DeadLetterProcessor;
 import queues.QueueProcessor;
 
 import java.io.IOException;
@@ -14,20 +16,24 @@ public class Main {
 
         UserRepository userRepository = new UserRepository();
         EventQueue eventQueue = new EventQueue();
+        DeadLetterEventQueue deadLetterEventQueue = new DeadLetterEventQueue();
 
-        Thread eventThread = new Thread(new EventProcessor(eventQueue, serverSocket));
+        Thread eventThread = new Thread(new EventProcessor(eventQueue, deadLetterEventQueue, serverSocket));
         Thread clientThread = new Thread(new ClientProcessor(userRepository, clientSocket));
-        Thread queueThread = new Thread(new QueueProcessor(eventQueue, userRepository));
+        Thread queueThread = new Thread(new QueueProcessor(eventQueue, userRepository, deadLetterEventQueue));
+        Thread deadLetterThread = new Thread(new DeadLetterProcessor(deadLetterEventQueue));
 
         eventThread.start();
         clientThread.start();
         queueThread.start();
+        deadLetterThread.start();
+
 
         try {
             eventThread.join();
             clientThread.join();
             queueThread.join();
-
+            deadLetterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

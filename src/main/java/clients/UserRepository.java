@@ -25,7 +25,7 @@ public class UserRepository implements RepositoryInterface {
     @Override
     public User get(int id) {
         if (!clients.containsKey(id)) {
-            return createIfNotExist(id);
+            return create(id);
         }
         return clients.get(id);
     }
@@ -35,10 +35,10 @@ public class UserRepository implements RepositoryInterface {
         return clients.values();
     }
 
-    private User createIfNotExist(int id) {
+    private User create(int id) {
         User user = new User(id, new PrintWriter(new NullStream()));
+        user.offlineUser = true;
         clients.put(id, user);
         return user;
     }
-
 }

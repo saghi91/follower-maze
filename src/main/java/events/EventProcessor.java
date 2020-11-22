@@ -1,6 +1,9 @@
 package events;
 
 import events.factory.EventFactory;
+import exceptions.EventException;
+import queues.DeadLetterQueueInterface;
+import queues.QueueInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,11 +12,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EventProcessor implements Runnable {
-    private final EventQueue eventQueue;
+    private final QueueInterface eventQueue;
+    private final DeadLetterQueueInterface deadLetterQueueInterface;
     private final ServerSocket serverSocket;
 
-    public EventProcessor(EventQueue eventQueue, java.net.ServerSocket serverSocket) {
+    public EventProcessor(EventQueue eventQueue, DeadLetterQueueInterface deadLetterQueueInterface, ServerSocket serverSocket) {
         this.eventQueue = eventQueue;
+        this.deadLetterQueueInterface = deadLetterQueueInterface;
         this.serverSocket = serverSocket;
     }
 
@@ -34,9 +39,14 @@ public class EventProcessor implements Runnable {
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String rawPayload = reader.readLine();
         while (rawPayload != null) {
-            BaseEvent baseEvent = EventFactory.create(rawPayload);
-            eventQueue.add(baseEvent);
-            rawPayload = reader.readLine();
+            try {
+                BaseEvent baseEvent = EventFactory.create(rawPayload);
+                eventQueue.add(baseEvent);
+                rawPayload = reader.readLine();
+            } catch (EventException e) {
+                rawPayload = reader.readLine();
+                deadLetterQueueInterface.add(rawPayload);
+            }
         }
     }
 }

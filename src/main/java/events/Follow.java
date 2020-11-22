@@ -1,7 +1,7 @@
 package events;
 
-import clients.User;
 import clients.RepositoryInterface;
+import clients.User;
 
 public class Follow extends BaseEvent {
     private final int fromUser;
@@ -21,7 +21,10 @@ public class Follow extends BaseEvent {
     @Override
     public void get(RepositoryInterface clientRepository) {
         User user = clientRepository.get(toUser);
+        if (!user.offlineUser) {
+            this.hasIssue = true;
+        }
         user.addFollower(fromUser);
-        user.useEvent(this);
+        user.emit(this);
     }
 }

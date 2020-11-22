@@ -13,10 +13,6 @@ public class EventQueue implements QueueInterface {
         queue.add(baseEvent);
     }
 
-    public int count() {
-        return queue.size();
-    }
-
     @Override
     public Collection<BaseEvent> getAll() {
         return queue;

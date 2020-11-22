@@ -5,9 +5,8 @@ import events.BaseEvent;
 import java.util.Collection;
 
 public interface QueueInterface {
-    void add(BaseEvent baseEventHandler);
+    void add(BaseEvent baseEvent);
     BaseEvent peek();
     BaseEvent poll();
-    int count();
     Collection<BaseEvent> getAll();
 }

@@ -1,9 +1,10 @@
 package events;
 
-import clients.User;
 import clients.RepositoryInterface;
+import clients.User;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StatusUpdate extends BaseEvent {
     private final int fromUser;
@@ -20,14 +21,19 @@ public class StatusUpdate extends BaseEvent {
 
     @Override
     public void get(RepositoryInterface clientRepository) {
+        AtomicBoolean success = new AtomicBoolean(true);
         User user = clientRepository.get(fromUser);
         Collection<Integer> followers = user.getFollowers();
         followers.forEach(followerId -> {
             User follower = clientRepository.get(followerId);
-            boolean used = follower.useEvent(this);
-            if (!used) {
+            if (!follower.emit(this)) {
                 user.removeFollower(follower.getId());
+                success.set(false);
             }
         });
+
+        if (!user.offlineUser && success.get()) {
+            this.hasIssue = true;
+        }
     }
 }

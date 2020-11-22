@@ -1,6 +1,8 @@
 package events.factory;
 
 import events.BaseEvent;
+import events.DeadLetterEventQueue;
+import exceptions.EventException;
 import utils.EventConstants;
 
 import java.util.Arrays;
@@ -8,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class EventFactory {
-    public static BaseEvent create(String rawPayload) {
+    public static BaseEvent create(String rawPayload) throws EventException {
 
         String[] payloadParts = rawPayload.split(EventConstants.PAYLOAD_DELIMITER);
         Set<EventBuilder> eventTypes = new HashSet<>(Arrays.asList(getValues()));
@@ -21,8 +23,7 @@ public class EventFactory {
                 return eventBuilder.build(sequenceNumber, payloadParts);
             }
         }
-
-        throw new RuntimeException("Event type not found");
+        throw new EventException("event cannot be created", rawPayload);
     }
 
     private static EventBuilder[] getValues() {

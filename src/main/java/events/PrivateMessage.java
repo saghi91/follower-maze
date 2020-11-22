@@ -1,7 +1,7 @@
 package events;
 
-import clients.User;
 import clients.RepositoryInterface;
+import clients.User;
 
 public class PrivateMessage extends BaseEvent {
     private final int fromUserId;
@@ -21,6 +21,9 @@ public class PrivateMessage extends BaseEvent {
     @Override
     public void get(RepositoryInterface clientRepository) {
         User user = clientRepository.get(toUser);
-        user.useEvent(this);
+        if (user.offlineUser) {
+            this.hasIssue = true;
+        }
+        user.emit(this);
     }
 }
