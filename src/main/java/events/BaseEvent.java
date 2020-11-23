@@ -1,9 +1,9 @@
 package events;
 
 import clients.RepositoryInterface;
+import exceptions.EventException;
 
 public abstract class BaseEvent implements Comparable<BaseEvent> {
-    public boolean hasIssue = false;
     public final int sequenceNumber;
 
     public BaseEvent(int sequenceNumber) {
@@ -15,5 +15,5 @@ public abstract class BaseEvent implements Comparable<BaseEvent> {
         return Integer.compare(sequenceNumber, baseEvent.sequenceNumber);
     }
 
-    public abstract void get(RepositoryInterface clientRepository);
+    public abstract void get(RepositoryInterface clientRepository) throws EventException;
 }

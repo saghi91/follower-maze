@@ -17,7 +17,7 @@ public class UserRepository implements RepositoryInterface {
         add(id, socket.getOutputStream());
     }
 
-    private void add(int id, OutputStream stream) {
+    public void add(int id, OutputStream stream) {
         User user = new User(id, new PrintWriter(new OutputStreamWriter(stream)));
         clients.put(id, user);
     }

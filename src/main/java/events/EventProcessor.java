@@ -44,8 +44,8 @@ public class EventProcessor implements Runnable {
                 eventQueue.add(baseEvent);
                 rawPayload = reader.readLine();
             } catch (EventException e) {
-                rawPayload = reader.readLine();
                 deadLetterQueueInterface.add(rawPayload);
+                rawPayload = reader.readLine();
             }
         }
     }

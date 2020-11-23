@@ -2,8 +2,10 @@ package events;
 
 import clients.RepositoryInterface;
 import clients.User;
+import exceptions.EventException;
 
 public class Follow extends BaseEvent {
+    private static final String FOLLOW_PAYLOAD_PATTERN = "%d|F|%d|%d";
     private final int fromUser;
     private final int toUser;
 
@@ -15,16 +17,16 @@ public class Follow extends BaseEvent {
 
     @Override
     public String toString() {
-        return String.format("%d|F|%d|%d", sequenceNumber, fromUser, toUser);
+        return String.format(FOLLOW_PAYLOAD_PATTERN, sequenceNumber, fromUser, toUser);
     }
 
     @Override
-    public void get(RepositoryInterface clientRepository) {
+    public void get(RepositoryInterface clientRepository) throws EventException {
         User user = clientRepository.get(toUser);
-        if (!user.offlineUser) {
-            this.hasIssue = true;
-        }
         user.addFollower(fromUser);
         user.emit(this);
+        if (user.offlineUser) {
+            throw new EventException("event cannot be published", this.toString());
+        }
     }
 }

@@ -9,11 +9,17 @@ public class DeadLetterProcessor implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             String rawPayload = deadLetterQueueInterface.peek();
             if (rawPayload != null) {
                 process(rawPayload);
             }
+        }
+    }
+
+    public void processDeadLetterQueue() {
+        while (deadLetterQueueInterface.peek() != null) {
+            process(deadLetterQueueInterface.peek());
         }
     }
 

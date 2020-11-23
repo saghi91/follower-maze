@@ -13,7 +13,7 @@ public class User implements Comparable<User>{
     private final Set<Integer> followers = new HashSet<>();
     private final PrintWriter writer;
 
-    User(int id, PrintWriter writer) {
+    public User(int id, PrintWriter writer) {
         this.id = id;
         this.writer = writer;
         this.offlineUser = false;

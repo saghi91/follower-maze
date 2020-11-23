@@ -2,8 +2,10 @@ package events;
 
 import clients.RepositoryInterface;
 import clients.User;
+import exceptions.EventException;
 
 public class PrivateMessage extends BaseEvent {
+    private static final String PRIVATE_MESSAGE_PAYLOAD_PATTERN = "%d|P|%d|%d";
     private final int fromUserId;
     private int toUser;
 
@@ -15,15 +17,15 @@ public class PrivateMessage extends BaseEvent {
 
     @Override
     public String toString() {
-        return String.format("%d|P|%d|%d", sequenceNumber, fromUserId, toUser);
+        return String.format(PRIVATE_MESSAGE_PAYLOAD_PATTERN, sequenceNumber, fromUserId, toUser);
     }
 
     @Override
-    public void get(RepositoryInterface clientRepository) {
+    public void get(RepositoryInterface clientRepository) throws EventException {
         User user = clientRepository.get(toUser);
-        if (user.offlineUser) {
-            this.hasIssue = true;
-        }
         user.emit(this);
+        if (user.offlineUser) {
+            throw new EventException("Event cannot be published", this.toString());
+        }
     }
 }

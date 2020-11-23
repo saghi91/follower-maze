@@ -4,6 +4,7 @@ import clients.RepositoryInterface;
 import clients.User;
 
 public class Unfollow extends BaseEvent {
+    private static final String UNFOLLOW_PAYLOAD_PATTERN = "%d|U|%d|%d";
     private final int fromUser;
     private final int toUser;
 
@@ -15,7 +16,7 @@ public class Unfollow extends BaseEvent {
 
     @Override
     public String toString() {
-        return String.format("%d|U|%d|%d", sequenceNumber, fromUser, toUser);
+        return String.format(UNFOLLOW_PAYLOAD_PATTERN, sequenceNumber, fromUser, toUser);
     }
 
     @Override

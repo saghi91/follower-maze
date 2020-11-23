@@ -28,7 +28,6 @@ public class Main {
         queueThread.start();
         deadLetterThread.start();
 
-
         try {
             eventThread.join();
             clientThread.join();
