@@ -2,7 +2,6 @@ package events;
 
 import clients.RepositoryInterface;
 import clients.User;
-import exceptions.EventException;
 
 public class Follow extends BaseEvent {
     private static final String FOLLOW_PAYLOAD_PATTERN = "%d|F|%d|%d";
@@ -25,8 +24,8 @@ public class Follow extends BaseEvent {
         User user = clientRepository.get(toUser);
         user.addFollower(fromUser);
         user.emit(this);
-        if (user.offlineUser) {
-            throw new EventException("event cannot be published", this.toString());
+        if (user.isOfflineUser()) {
+            throw new EventException("Event cannot be published!", this.toString());
         }
     }
 }

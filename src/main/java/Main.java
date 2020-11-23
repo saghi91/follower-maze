@@ -1,8 +1,8 @@
 import clients.ClientProcessor;
 import clients.UserRepository;
-import events.DeadLetterEventQueue;
+import queues.DeadLetterQueue;
 import events.EventProcessor;
-import events.EventQueue;
+import queues.EventQueue;
 import queues.DeadLetterProcessor;
 import queues.QueueProcessor;
 
@@ -16,12 +16,12 @@ public class Main {
 
         UserRepository userRepository = new UserRepository();
         EventQueue eventQueue = new EventQueue();
-        DeadLetterEventQueue deadLetterEventQueue = new DeadLetterEventQueue();
+        DeadLetterQueue deadLetterQueue = new DeadLetterQueue();
 
-        Thread eventThread = new Thread(new EventProcessor(eventQueue, deadLetterEventQueue, serverSocket));
+        Thread eventThread = new Thread(new EventProcessor(eventQueue, deadLetterQueue, serverSocket));
         Thread clientThread = new Thread(new ClientProcessor(userRepository, clientSocket));
-        Thread queueThread = new Thread(new QueueProcessor(eventQueue, userRepository, deadLetterEventQueue));
-        Thread deadLetterThread = new Thread(new DeadLetterProcessor(deadLetterEventQueue));
+        Thread queueThread = new Thread(new QueueProcessor(eventQueue, userRepository, deadLetterQueue));
+        Thread deadLetterThread = new Thread(new DeadLetterProcessor(deadLetterQueue));
 
         eventThread.start();
         clientThread.start();

@@ -1,7 +1,6 @@
 package events;
 
 import clients.RepositoryInterface;
-import exceptions.EventException;
 
 public abstract class BaseEvent implements Comparable<BaseEvent> {
     public final int sequenceNumber;

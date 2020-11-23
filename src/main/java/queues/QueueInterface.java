@@ -1,12 +1,11 @@
 package queues;
 
-import events.BaseEvent;
-
 import java.util.Collection;
 
-public interface QueueInterface {
-    void add(BaseEvent baseEvent);
-    BaseEvent peek();
-    BaseEvent poll();
-    Collection<BaseEvent> getAll();
+public interface QueueInterface<T> {
+    void add(T item);
+    T peek();
+    T poll();
+    void remove();
+    Collection<T> getAll();
 }

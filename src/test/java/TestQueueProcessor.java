@@ -1,22 +1,18 @@
-import clients.User;
 import clients.UserRepository;
 import events.*;
-import exceptions.EventException;
+import events.EventException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import queues.DeadLetterQueueInterface;
+import queues.DeadLetterQueue;
+import queues.EventQueue;
+import queues.QueueInterface;
 import queues.QueueProcessor;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,26 +24,26 @@ public class TestQueueProcessor {
     private EventQueue eventQueue;
 
     @Mock
-    private StatusUpdate statusUpdate;
+    private Follow follow;
 
     @Mock
     private UserRepository userRepository;
 
     private QueueProcessor queueProcessor;
 
-    private DeadLetterQueueInterface deadLetterQueue = new DeadLetterEventQueue();
+    private DeadLetterQueue deadLetterQueue = new DeadLetterQueue();
 
     @Before
     public void setUp() {
-        when(eventQueue.peek()).thenReturn(statusUpdate, null);
+        when(eventQueue.peek()).thenReturn(follow, null);
         queueProcessor = new QueueProcessor(eventQueue, userRepository, deadLetterQueue);
     }
 
     @Test
-    public void throwEventIsPushedToDLQWhenEventIsNotPublishedSuccessfully() throws EventException {
+    public void testPushToDeadLetterWhenEventExceptionCaught() throws EventException {
         //Given
-        when(eventQueue.poll()).thenReturn(statusUpdate);
-        Mockito.doThrow(new EventException("event cannot be published!", statusUpdate.toString())).doNothing().when(statusUpdate).get(userRepository);
+        when(eventQueue.poll()).thenReturn(follow);
+        Mockito.doThrow(new EventException("Event cannot be published!", follow.toString())).when(follow).get(userRepository);
         //When
         queueProcessor.run();
         //Then

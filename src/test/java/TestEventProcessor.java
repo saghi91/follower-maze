@@ -1,11 +1,12 @@
-import clients.UserRepository;
 import events.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import queues.DeadLetterQueueInterface;
+import queues.DeadLetterQueue;
+import queues.EventQueue;
+import queues.QueueInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class TestEventProcessor {
 
     private EventProcessor eventProcessor;
 
-    private DeadLetterQueueInterface deadLetterQueue = new DeadLetterEventQueue();
+    private DeadLetterQueue deadLetterQueue = new DeadLetterQueue();
 
     @Before
     public void setUp() throws IOException {

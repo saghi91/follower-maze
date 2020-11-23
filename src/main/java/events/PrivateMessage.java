@@ -2,7 +2,6 @@ package events;
 
 import clients.RepositoryInterface;
 import clients.User;
-import exceptions.EventException;
 
 public class PrivateMessage extends BaseEvent {
     private static final String PRIVATE_MESSAGE_PAYLOAD_PATTERN = "%d|P|%d|%d";
@@ -24,8 +23,8 @@ public class PrivateMessage extends BaseEvent {
     public void get(RepositoryInterface clientRepository) throws EventException {
         User user = clientRepository.get(toUser);
         user.emit(this);
-        if (user.offlineUser) {
-            throw new EventException("Event cannot be published", this.toString());
+        if (user.isOfflineUser()) {
+            throw new EventException("Event cannot be published!", this.toString());
         }
     }
 }

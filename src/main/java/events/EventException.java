@@ -1,4 +1,4 @@
-package exceptions;
+package events;
 
 public class EventException extends Exception {
     private final String rawPayload;

@@ -1,11 +1,9 @@
-package events;
-
-import queues.DeadLetterQueueInterface;
+package queues;
 
 import java.util.Collection;
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class DeadLetterEventQueue implements DeadLetterQueueInterface {
+public class DeadLetterQueue implements QueueInterface<String> {
     private PriorityBlockingQueue<String> deadLetter = new PriorityBlockingQueue<>();
 
     @Override
@@ -24,8 +22,8 @@ public class DeadLetterEventQueue implements DeadLetterQueueInterface {
     }
 
     @Override
-    public String remove() {
-        return deadLetter.remove();
+    public void remove() {
+        deadLetter.remove();
     }
 
     @Override

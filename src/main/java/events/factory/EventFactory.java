@@ -1,8 +1,7 @@
 package events.factory;
 
 import events.BaseEvent;
-import events.DeadLetterEventQueue;
-import exceptions.EventException;
+import events.EventException;
 import utils.EventConstants;
 
 import java.util.Arrays;

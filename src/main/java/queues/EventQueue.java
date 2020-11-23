@@ -1,11 +1,10 @@
-package events;
+package queues;
 
-import queues.QueueInterface;
-
+import events.BaseEvent;
 import java.util.Collection;
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class EventQueue implements QueueInterface {
+public class EventQueue implements QueueInterface<BaseEvent> {
     private PriorityBlockingQueue<BaseEvent> queue = new PriorityBlockingQueue<>();
 
     @Override
@@ -20,11 +19,24 @@ public class EventQueue implements QueueInterface {
 
     @Override
     public BaseEvent peek() {
-        return queue.peek();
+        BaseEvent data = null;
+        try {
+            data = queue.take();
+            queue.add(data);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 
     @Override
     public BaseEvent poll() {
         return queue.poll();
+    }
+
+    @Override
+    public void remove() {
+        queue.remove();
     }
 }

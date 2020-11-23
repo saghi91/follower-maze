@@ -2,7 +2,6 @@ package events;
 
 import clients.RepositoryInterface;
 import clients.User;
-import exceptions.EventException;
 
 import java.util.Collection;
 
@@ -31,8 +30,8 @@ public class StatusUpdate extends BaseEvent {
             }
         });
 
-        if (user.offlineUser) {
-            throw new EventException("event cannot be published!", this.toString());
+        if (user.isOfflineUser()) {
+            throw new EventException("Event cannot be published!", this.toString());
         }
     }
 }

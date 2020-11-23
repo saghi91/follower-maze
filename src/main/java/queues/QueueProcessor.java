@@ -3,20 +3,19 @@ package queues;
 import clients.RepositoryInterface;
 import clients.UserRepository;
 import events.BaseEvent;
-import events.EventQueue;
-import exceptions.EventException;
+import events.EventException;
 
 public class QueueProcessor implements Runnable {
-    private final RepositoryInterface clientRepository;
-    private final QueueInterface eventQueue;
-    private final DeadLetterQueueInterface deadLetterQueueInterface;
+    private final RepositoryInterface userRepository;
+    private final QueueInterface<BaseEvent> eventQueue;
+    private final QueueInterface<String> deadLetterQueue;
     private int sequenceNumber = 1;
-    private boolean running = true;
 
-    public QueueProcessor(EventQueue eventQueue, UserRepository userRepository, DeadLetterQueueInterface deadLetterQueueInterface) {
+    public QueueProcessor(EventQueue eventQueue, UserRepository userRepository,
+                          DeadLetterQueue deadLetterQueue) {
         this.eventQueue = eventQueue;
-        this.clientRepository = userRepository;
-        this.deadLetterQueueInterface = deadLetterQueueInterface;
+        this.userRepository = userRepository;
+        this.deadLetterQueue = deadLetterQueue;
     }
 
     @Override
@@ -32,11 +31,11 @@ public class QueueProcessor implements Runnable {
         if (baseEvent.sequenceNumber <= sequenceNumber) {
             try {
                 baseEvent = eventQueue.poll();
-                baseEvent.get(clientRepository);
+                baseEvent.get(userRepository);
                 sequenceNumber++;
             } catch (EventException e) {
+                deadLetterQueue.add(e.getRawPayload());
                 sequenceNumber++;
-                deadLetterQueueInterface.add(e.getMessage());
             }
         }
     }

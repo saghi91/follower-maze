@@ -1,31 +1,24 @@
 package queues;
 
 public class DeadLetterProcessor implements Runnable {
-    private final DeadLetterQueueInterface deadLetterQueueInterface;
+    private final QueueInterface<String> deadLetterQueue;
 
-    public DeadLetterProcessor(DeadLetterQueueInterface deadLetterQueueInterface) {
-        this.deadLetterQueueInterface = deadLetterQueueInterface;
+    public DeadLetterProcessor(QueueInterface<String> deadLetterQueue) {
+        this.deadLetterQueue = deadLetterQueue;
     }
 
     @Override
     public void run() {
-        while (true) {
-            String rawPayload = deadLetterQueueInterface.peek();
-            if (rawPayload != null) {
-                process(rawPayload);
-            }
-        }
-    }
-
-    public void processDeadLetterQueue() {
-        while (deadLetterQueueInterface.peek() != null) {
-            process(deadLetterQueueInterface.peek());
+        String rawPayload = deadLetterQueue.peek();
+        while (rawPayload != null) {
+            process(rawPayload);
+            rawPayload = deadLetterQueue.peek();
         }
     }
 
     private void process(String rawPayload) {
-        if (deadLetterQueueInterface.getAll().contains(rawPayload)) {
-            deadLetterQueueInterface.remove();
+        if (deadLetterQueue.getAll().contains(rawPayload)) {
+            deadLetterQueue.remove();
         }
     }
 }

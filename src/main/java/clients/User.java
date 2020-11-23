@@ -4,19 +4,18 @@ import events.BaseEvent;
 
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class User implements Comparable<User>{
-    public boolean offlineUser;
+    private boolean offlineUser = false;
     private final Integer id;
-    private final Set<Integer> followers = new HashSet<>();
+    private final Set<Integer> followers = new ConcurrentSkipListSet<>();
     private final PrintWriter writer;
 
     public User(int id, PrintWriter writer) {
         this.id = id;
         this.writer = writer;
-        this.offlineUser = false;
     }
 
     public Collection<Integer> getFollowers() {
@@ -38,6 +37,14 @@ public class User implements Comparable<User>{
 
     public void removeFollower(int id) {
         followers.remove(id);
+    }
+
+    public boolean isOfflineUser() {
+        return offlineUser;
+    }
+
+    public void setOfflineUser(boolean offlineUser) {
+        this.offlineUser = offlineUser;
     }
 
     @Override

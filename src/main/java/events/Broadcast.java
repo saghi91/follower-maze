@@ -2,7 +2,6 @@ package events;
 
 import clients.User;
 import clients.RepositoryInterface;
-import exceptions.EventException;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,7 +30,7 @@ public class Broadcast extends BaseEvent {
         });
 
         if (!success.get()) {
-            throw new EventException("event cannot be published", this.toString());
+            throw new EventException("Event cannot be published!", this.toString());
         }
     }
 }

@@ -37,7 +37,7 @@ public class UserRepository implements RepositoryInterface {
 
     private User create(int id) {
         User user = new User(id, new PrintWriter(new NullStream()));
-        user.offlineUser = true;
+        user.setOfflineUser(true);
         clients.put(id, user);
         return user;
     }
