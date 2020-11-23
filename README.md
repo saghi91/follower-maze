@@ -1,7 +1,7 @@
 # Follower maze solution
 This client-server application consists of two threads writing/reading the data to/from the same source.
 
-##Client
+##Client##
 
 * The main responsibility of the client is to handle the users (be it online/offline).
 * **ClientProcessor** is created to process the connected users.
